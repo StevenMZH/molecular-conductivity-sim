@@ -8,15 +8,26 @@ from typing import List
 
 def unzip_and_getfilepaths(zip_file: pathlib.Path, extract_to: pathlib.Path) -> List[pathlib.Path]:
     """
-    Unzips the given zipfile to the specified directory and returns a list of extracted file paths.
+    Descomprime el archivo y devuelve una lista SOLO con las rutas de los archivos encontrados,
+    filtrando carpetas para evitar errores de permisos.
     """
-
     extracted_files = []
 
-    with ZipFile(zip_file) as zip_ref:
-        zip_ref.extractall(extract_to)
-        for file_info in zip_ref.infolist():
-            extracted_files.append(extract_to / file_info.filename)
+    extract_to.mkdir(parents=True, exist_ok=True)
+
+    try:
+        with ZipFile(zip_file, 'r') as zip_ref:
+            zip_ref.extractall(extract_to)
+            
+            for file_info in zip_ref.infolist():
+                # Solo queremos lo que NO sea carpeta.
+                if not file_info.is_dir():
+                    full_path = extract_to / file_info.filename
+                    extracted_files.append(full_path)
+                    
+    except Exception as e:
+        print(f"Error crítico al descomprimir: {e}")
+        return []
 
     return extracted_files
 

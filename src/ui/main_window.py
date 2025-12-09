@@ -33,3 +33,4 @@ class MainWindow(QMainWindow):
         print(f"Received zip file to process: {zip_path}")
 
         self.widget_layout.setCurrentIndex(1)
+        self.process_screen.process_zip_file(zip_path)
