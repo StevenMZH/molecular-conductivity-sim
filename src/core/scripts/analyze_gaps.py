@@ -5,27 +5,21 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.append(str(ROOT))
-
-from libs.paths import RESULTS_DIR, PLOTS_DIR
+from libs.paths import RESULTS_DIR, PLOTS_DIR, STRUCT_CSV, LEVELS_CSV
 
 
 def main():
-    structs_csv = RESULTS_DIR / "structures.csv"
-    levels_csv  = RESULTS_DIR / "xtb_levels.csv"
-
-    if not structs_csv.exists() or not levels_csv.exists():
-        print("⚠ Faltan structures.csv o xtb_levels.csv. Ejecuta mapper y normalizer primero.")
+    if not STRUCT_CSV.exists() or not LEVELS_CSV.exists():
+        print("Faltan structures.csv o xtb_levels.csv. Ejecuta mapper y normalizer primero.")
         return
 
-    df_structs = pd.read_csv(structs_csv)
-    df_levels  = pd.read_csv(levels_csv)
+    df_structs = pd.read_csv(STRUCT_CSV)
+    df_levels  = pd.read_csv(LEVELS_CSV)
 
     df = df_structs.merge(df_levels, on="id", how="inner")
     out_csv = RESULTS_DIR / "xtb_gaps_parsed.csv"
     df.to_csv(out_csv, index=False, encoding="utf-8")
-    print(f"📄 Dataset completo guardado en {out_csv}")
+    print(f"Dataset completo guardado en {out_csv}")
 
     # === Plot 1: Gap vs % dopaje (por dopante) ===
     plt.figure(figsize=(8, 6))

@@ -3,12 +3,8 @@ import sys
 from pathlib import Path
 import csv
 
-# asegurar que podemos importar libs/*
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.append(str(ROOT))
-
 from libs.paths import DATASET_DIR, RESULTS_DIR
-from libs.naming import parse_structure_name
+from libs.filename_parser import parse_structure_name
 
 
 def main():

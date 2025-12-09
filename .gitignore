@@ -1,2 +1,8 @@
 .venv/
 *.pyc
+__pycache__/
+src/core/dataset/
+src/core/results/
+src/core/plots/
+src/core/tmp_zip/
+
